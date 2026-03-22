@@ -5,13 +5,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DuelTracker</title>
+    <meta name="theme-color" content="#ffffff" />
     <base href="/" />
     <link rel="preload" id="webassembly" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <link href="_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link href="DuelTracker.styles.css" rel="stylesheet" />
     <script type="importmap"></script>
+    <script>
+        // Register a basic service worker if supported (optional).
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js').catch(function (e) {
+                // ignore registration errors
+                console.warn('ServiceWorker registration failed:', e);
+            });
+        }
+    </script>
 </head>
 
 <body>
