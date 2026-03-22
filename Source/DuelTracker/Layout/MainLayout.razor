@@ -3,10 +3,11 @@
 <FluentLayout>
     <FluentHeader>
         <FluentEmoji Value="@(new Emojis.Activities.Color.Default.FlowerPlayingCards())" />
-       Duel Tracker
+        Duel Tracker
+        <DuelTracker.Components.HeaderToolbar />
     </FluentHeader>
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
- @*        <NavMenu /> *@
+        @*        <NavMenu /> *@
         <FluentBodyContent Class="body-content">
             <ErrorBoundary>
                 <ChildContent>
@@ -20,7 +21,7 @@
             </ErrorBoundary>
         </FluentBodyContent>
     </FluentStack>
-@*     <FluentFooter>
+    @*     <FluentFooter>
         <a href="https://www.fluentui-blazor.net" target="_blank">Documentation and demos</a>
         <FluentSpacer />
         <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor" target="_blank">About Blazor</a>

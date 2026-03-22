@@ -1,0 +1,15 @@
+@using DuelTracker.Services
+@inject AppActionsService Actions
+
+<FluentToolbar Style="background-color:var(--acent-fill-rest)" >
+    <FluentButton IconStart="@(new Icons.Regular.Size16.CircleSparkle())" @onclick="OnResetClicked"></FluentButton>
+    <FluentSpacer />
+    @* additional toolbar items can go here *@
+</FluentToolbar>
+
+@code {
+    private void OnResetClicked()
+    {
+        Actions.RequestReset();
+    }
+}
