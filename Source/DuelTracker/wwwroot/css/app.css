@@ -8,6 +8,55 @@ body {
     margin: 0;
 }
 
+/* Mobile-first accessibility and touch optimizations */
+@media (max-width: 600px) {
+    /* Make interactive controls easier to tap */
+    button, .fluent-button, input[type="button"], input[type="submit"], a.button {
+        min-height: 48px;
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+        touch-action: manipulation;
+    }
+
+    /* Ensure form controls use full width */
+    input, select, textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Stack FluentStack components vertically on small screens */
+    fluent-stack, .fluent-stack, .main > * {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+    }
+
+    /* Player components should sit side-by-side on wider screens but stack on mobile */
+    .players {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    /* Reduce heavy paddings and make content span full width */
+    .content {
+        padding: 0.75rem !important;
+    }
+
+    .loading-progress {
+        width: 4rem;
+        height: 4rem;
+        margin-top: 15vh;
+    }
+
+    /* Improve touch feel */
+    * {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+}
+
 .navmenu-icon {
     display: none;
 }
