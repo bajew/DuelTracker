@@ -1,5 +1,8 @@
-﻿@using DuelTracker.Services
+﻿@using DuelTracker.Models
+@using DuelTracker.Services
+@using DuelTracker.Dialogs
 @using System.ComponentModel
+@inject IDialogService DialogService
 
 <FluentStack Orientation="Orientation.Vertical" Class="player-card">
 
@@ -22,7 +25,7 @@
     @if (AppState?.IsMobile ?? false)
     {
         <div style="width: 200px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
-            <FluentButton IconStart="@(new Icons.Regular.Size20.MathSymbols())" />
+            <FluentButton IconStart="@(new Icons.Regular.Size20.MathSymbols())" OnClick="OpenCalculator" />
         </div>
     }
     else
@@ -172,5 +175,21 @@
     {
         AppState?.PropertyChanged -= AppState_PropertyChanged;
     }
+    private async Task OpenCalculator(MouseEventArgs args)
+    {
+        var dialogData = new CalculatorExpression();
 
+        DialogParameters parameters = new()
+        {
+            //Hier kann man Die Größe und Titel des Dialogs bestimmen
+            Title = PlayerName
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<CalculatorDialog>(dialogData, parameters);
+        DialogResult? result = await dialog.Result;
+        if (!result.Cancelled && result.Data is CalculatorExpression resultData)
+        {
+            ApplyLifePointChange(resultData.Expression);
+        }
+    }
 }
