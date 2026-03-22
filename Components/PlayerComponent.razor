@@ -1,0 +1,148 @@
+﻿
+<FluentStack Orientation="Orientation.Vertical">
+
+    <FluentTextField @bind-Value="PlayerName">
+        <FluentIcon Value="@(new Icons.Regular.Size24.Person())" Color="Color.Accent" Slot="start" />
+    </FluentTextField>
+
+    <div style="width: 215px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress Stroke="ProgressStroke.Large" Value="@PercentageLife()" Max="100" Min="0"></FluentProgress>
+    </div>
+
+    <div style="width: 200px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentLabel Style="font-size:2rem;" Alignment="HorizontalAlignment.Center">@LifePoints</FluentLabel>
+    </div>
+
+    <div style="width: 200px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        @*  <FluentDivider Orientation="Orientation.Horizontal" /> *@
+    </div>
+
+    <FluentTextField @bind-Value="Expression"
+                     @oninput="OnInput"
+                     @onkeypress="OnExpressionExecute">
+        <FluentIcon Value="@(new Icons.Regular.Size20.MathSymbols())" Color="Color.Accent" Slot="start" />
+    </FluentTextField>
+
+    <div style="width: 200px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentStack Orientation="Orientation.Horizontal">
+            <FluentStack Orientation="Orientation.Vertical">
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SlashForward())" @onclick='() => ApplyLifePointChange("/2")'>2</FluentButton>
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-1000")'>1000</FluentButton>
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-500")'>500</FluentButton>
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-100")'>100</FluentButton>
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-50")'>50</FluentButton>
+            </FluentStack>
+            <FluentStack Orientation="Orientation.Vertical">
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.TextAsterisk())" @onclick='() => ApplyLifePointChange("*2")'>2</FluentButton>
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+1000")'>1000</FluentButton>
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+500")'>500</FluentButton>
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+100")'>100</FluentButton>
+                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+50")'>50</FluentButton>
+            </FluentStack>
+        </FluentStack>
+    </div>
+
+
+</FluentStack>
+
+
+
+@code {
+
+    [Parameter]
+    public string PlayerName { get; set; } = "Player 1";
+
+    [Parameter]
+    public int LifePoints { get; set; } = 8000;
+
+    [Parameter]
+    public int MaxLifePoints { get; set; } = 8000;
+
+    public string Expression { get; set; } = string.Empty;
+
+    private string ValidExpressions = $"+-*/";
+
+    public void Reset(int value)
+    {
+        LifePoints = value;
+        StateHasChanged();
+    }
+    public void Init(int maxValue)
+    {
+        LifePoints = maxValue;
+        MaxLifePoints = maxValue;
+        StateHasChanged();
+    }
+
+    private int PercentageLife()
+    {
+        double currentValue = (double)LifePoints;
+        double maxValue = (double)MaxLifePoints;
+
+        if (maxValue <= 0)
+            return 0; // or throw an exception, depending on your needs
+
+        double ratio = currentValue / maxValue;
+
+        // Clamp between 0 and 1
+        ratio = Math.Clamp(ratio, 0.0, 1.0);
+
+        // Convert to percentage
+        return (int)Math.Round(ratio * 100);
+    }
+
+    private void ApplyLifePointChange(string expression)
+    {
+        if (string.IsNullOrWhiteSpace(expression))
+            return;
+
+        char operatorChar = expression[0];
+        int value = 0;
+        if (ValidExpressions.Contains(operatorChar))
+        {
+            if (!int.TryParse(expression.Substring(1), out value))
+                return;
+        }
+        else
+        {
+            operatorChar = '+';
+            if (!int.TryParse(expression, out value))
+                return;
+        }
+
+        switch (operatorChar)
+        {
+            case '+':
+                LifePoints += value;
+                break;
+            case '-':
+                LifePoints -= value;
+                break;
+            case '*':
+                LifePoints *= value;
+                break;
+            case '/':
+                if (value != 0)
+                    LifePoints /= value;
+                break;
+        }
+
+        if (LifePoints < 0)
+            LifePoints = 0;
+    }
+
+    private void OnInput(ChangeEventArgs e)
+    {
+        Expression = e.Value?.ToString() ?? string.Empty;
+    }
+
+    private void OnExpressionExecute(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" || e.Key == "NumpadEnter")
+        {
+            ApplyLifePointChange(Expression);
+            Expression = string.Empty;
+        }
+    }
+
+}

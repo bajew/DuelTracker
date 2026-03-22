@@ -1,0 +1,38 @@
+﻿@page "/"
+
+<PageTitle> Duel Tracker</PageTitle>
+
+
+<FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.CircleSparkle())" @onclick='() => Reset()'></FluentButton>
+
+<div style="width: 200px; height:25px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+</div>
+
+<FluentStack Orientation="Orientation.Horizontal" Width="500px">
+
+    <DuelTracker.Components.PlayerComponent @ref="Player1" PlayerName="Player 1" LifePoints="@InitialValue" />
+    <DuelTracker.Components.PlayerComponent @ref="Player2" PlayerName="Player 2" LifePoints="@InitialValue" />
+
+</FluentStack>
+
+@code {
+
+    public DuelTracker.Components.PlayerComponent? Player1 { get; set; }
+
+    public DuelTracker.Components.PlayerComponent? Player2 { get; set; }
+
+    public int InitialValue { get; set; } = 8000;
+
+    private void Reset()
+    {
+        Player1?.Reset(InitialValue);
+        Player2?.Reset(InitialValue);
+    }
+
+    protected override void OnInitialized()
+    {
+        Player1?.Init(InitialValue);
+        Player2?.Init(InitialValue);
+    }
+
+}
