@@ -1,5 +1,5 @@
 ﻿
-<FluentStack Orientation="Orientation.Vertical">
+<FluentStack Orientation="Orientation.Vertical" Class="player-card">
 
     <FluentTextField @bind-Value="PlayerName">
         <FluentIcon Value="@(new Icons.Regular.Size24.Person())" Color="Color.Accent" Slot="start" />
@@ -19,7 +19,9 @@
 
     <FluentTextField @bind-Value="Expression"
                      @oninput="OnInput"
-                     @onkeypress="OnExpressionExecute">
+                     @onkeypress="OnExpressionExecute"
+                     InputMode="InputMode.Numeric"
+                     >
         <FluentIcon Value="@(new Icons.Regular.Size20.MathSymbols())" Color="Color.Accent" Slot="start" />
     </FluentTextField>
 

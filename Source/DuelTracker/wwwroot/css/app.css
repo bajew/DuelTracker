@@ -79,6 +79,23 @@ body {
     width: 100%;
 }
 
+/* Make the players stack wrap when there's not enough horizontal space */
+.players {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+/* Player card sizing: allow flexible width but enforce a sensible max for readability */
+.player-card {
+    flex: 1 1 320px; /* grow, shrink, base width 320px */
+    max-width: 420px;
+    box-sizing: border-box;
+    padding: 0.5rem;
+}
+
 footer {
     background: var(--neutral-layer-4);
     color: var(--neutral-foreground-rest);

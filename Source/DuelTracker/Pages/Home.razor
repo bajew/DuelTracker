@@ -8,7 +8,7 @@
 <div style="width: 200px; height:25px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
 </div>
 
-<FluentStack Orientation="Orientation.Horizontal" Width="100%" Class="players">
+<FluentStack Orientation="Orientation.Horizontal" Width="100%" Class="players" Style="flex-wrap:wrap;">
 
     <DuelTracker.Components.PlayerComponent @ref="Player1" PlayerName="Player 1" LifePoints="@InitialValue" />
     <DuelTracker.Components.PlayerComponent @ref="Player2" PlayerName="Player 2" LifePoints="@InitialValue" />
