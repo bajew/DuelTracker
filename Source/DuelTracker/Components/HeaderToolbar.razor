@@ -1,15 +1,45 @@
 @using DuelTracker.Services
+@using System.ComponentModel
 @inject AppActionsService Actions
+@implements IDisposable
 
-<FluentToolbar Style="background-color:var(--acent-fill-rest)" >
+<FluentToolbar Style="background-color:var(--accent-fill-rest)">
+
     <FluentButton IconStart="@(new Icons.Regular.Size16.CircleSparkle())" @onclick="OnResetClicked"></FluentButton>
+    <FluentButton IconStart="@(new Icons.Regular.Size20.Phone())" @onclick="OnTogglePhoneClicked"></FluentButton>
+    
     <FluentSpacer />
     @* additional toolbar items can go here *@
 </FluentToolbar>
 
 @code {
+    [CascadingParameter]
+    public AppState? AppState { get; set; }
+
     private void OnResetClicked()
     {
         Actions.RequestReset();
+    }
+
+    private void OnTogglePhoneClicked()
+    {
+        AppState?.IsMobile = !AppState.IsMobile;
+        Actions.ToggleMobile();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        AppState?.PropertyChanged += AppState_PropertyChanged;
+    }
+
+    private void AppState_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        StateHasChanged(); 
+    }
+
+    public void Dispose()
+    {
+        AppState?.PropertyChanged -= AppState_PropertyChanged;
     }
 }

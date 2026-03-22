@@ -1,4 +1,6 @@
-﻿
+﻿@using DuelTracker.Services
+@using System.ComponentModel
+
 <FluentStack Orientation="Orientation.Vertical" Class="player-card">
 
     <FluentTextField @bind-Value="PlayerName">
@@ -17,33 +19,39 @@
         @*  <FluentDivider Orientation="Orientation.Horizontal" /> *@
     </div>
 
-    <FluentTextField @bind-Value="Expression"
-                     @oninput="OnInput"
-                     @onkeypress="OnExpressionExecute"
-                     InputMode="InputMode.Numeric"
-                     >
-        <FluentIcon Value="@(new Icons.Regular.Size20.MathSymbols())" Color="Color.Accent" Slot="start" />
-    </FluentTextField>
+    @if (AppState?.IsMobile ?? false)
+    {
+        <div style="width: 200px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+            <FluentButton IconStart="@(new Icons.Regular.Size20.MathSymbols())" />
+        </div>
+    }
+    else
+    {
+        <FluentTextField @bind-Value="Expression"
+                         @oninput="OnInput"
+                         @onkeypress="OnExpressionExecute">
+            <FluentIcon Value="@(new Icons.Regular.Size20.MathSymbols())" Color="Color.Accent" Slot="start" />
+        </FluentTextField>
 
-    <div style="width: 200px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
-        <FluentStack Orientation="Orientation.Horizontal">
-            <FluentStack Orientation="Orientation.Vertical">
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SlashForward())" @onclick='() => ApplyLifePointChange("/2")'>2</FluentButton>
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-1000")'>1000</FluentButton>
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-500")'>500</FluentButton>
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-100")'>100</FluentButton>
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-50")'>50</FluentButton>
+        <div style="width: 200px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+            <FluentStack Orientation="Orientation.Horizontal">
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SlashForward())" @onclick='() => ApplyLifePointChange("/2")'>2</FluentButton>
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-1000")'>1000</FluentButton>
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-500")'>500</FluentButton>
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-100")'>100</FluentButton>
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.SubtractSquare())" @onclick='() => ApplyLifePointChange("-50")'>50</FluentButton>
+                </FluentStack>
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.TextAsterisk())" @onclick='() => ApplyLifePointChange("*2")'>2</FluentButton>
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+1000")'>1000</FluentButton>
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+500")'>500</FluentButton>
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+100")'>100</FluentButton>
+                    <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+50")'>50</FluentButton>
+                </FluentStack>
             </FluentStack>
-            <FluentStack Orientation="Orientation.Vertical">
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.TextAsterisk())" @onclick='() => ApplyLifePointChange("*2")'>2</FluentButton>
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+1000")'>1000</FluentButton>
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+500")'>500</FluentButton>
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+100")'>100</FluentButton>
-                <FluentButton style="width: 100px;" IconStart="@(new Icons.Regular.Size16.AddSquare())" @onclick='() => ApplyLifePointChange("+50")'>50</FluentButton>
-            </FluentStack>
-        </FluentStack>
-    </div>
-
+        </div>
+    }
 
 </FluentStack>
 
@@ -59,6 +67,9 @@
 
     [Parameter]
     public int MaxLifePoints { get; set; } = 8000;
+
+    [CascadingParameter]
+    public AppState AppState { get; set; } = default!;
 
     public string Expression { get; set; } = string.Empty;
 
@@ -145,6 +156,21 @@
             ApplyLifePointChange(Expression);
             Expression = string.Empty;
         }
+    }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        AppState?.PropertyChanged += AppState_PropertyChanged;
+    }
+
+    private void AppState_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        _ = InvokeAsync(() => StateHasChanged());
+    }
+
+    public void Dispose()
+    {
+        AppState?.PropertyChanged -= AppState_PropertyChanged;
     }
 
 }
