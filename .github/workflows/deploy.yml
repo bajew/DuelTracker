@@ -19,13 +19,13 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Publish Blazor WebAssembly
-        run: dotnet publish Source/DuelTracker/DuelTracker.csproj -c Release -o publish/wwwroot
+        run: dotnet publish Source/DuelTracker/DuelTracker.csproj -c Release -o publish
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Source/DuelTracker/publish/wwwroot
+          publish_dir: ./publish/wwwroot
           publish_branch: gh-pages
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
