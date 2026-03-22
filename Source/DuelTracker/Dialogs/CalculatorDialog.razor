@@ -1,0 +1,33 @@
+﻿@using DuelTracker.Components
+@using DuelTracker.Models
+@implements IDialogContentComponent
+
+<style>
+    .dialog-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 240px;
+        min-height: 160px;
+        padding: 12px;
+    }
+</style>
+
+<div class="dialog-center">
+    <NumericEntry @bind-Value="Content.Expression" OnSubmit="OnSubmit" />
+</div>
+
+@code {
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+
+    [Parameter]
+    public CalculatorExpression Content { get; set; } = default!;
+
+
+    public async Task OnSubmit()
+    {
+        await Dialog.CloseAsync(Content);
+    }
+}

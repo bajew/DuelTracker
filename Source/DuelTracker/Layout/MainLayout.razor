@@ -1,30 +1,43 @@
 ﻿@inherits LayoutComponentBase
+@inject DuelTracker.Services.AppState AppState
 
-<FluentLayout>
-    <FluentHeader>
-        <FluentEmoji Value="@(new Emojis.Activities.Color.Default.FlowerPlayingCards())" />
-        Duel Tracker
-        <DuelTracker.Components.HeaderToolbar />
-    </FluentHeader>
-    <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
-        @*        <NavMenu /> *@
-        <FluentBodyContent Class="body-content">
-            <ErrorBoundary>
-                <ChildContent>
-                    <div class="content">
-                        @Body
-                    </div>
-                </ChildContent>
-                <ErrorContent Context="ex">
-                    <div class="blazor-error-boundary">@ex.Message</div>
-                </ErrorContent>
-            </ErrorBoundary>
-        </FluentBodyContent>
-    </FluentStack>
-    @*     <FluentFooter>
+<CascadingValue Value="AppState">
+    <FluentLayout>
+        <FluentHeader>
+            <FluentEmoji Value="@(new Emojis.Activities.Color.Default.FlowerPlayingCards())" />
+            Duel Tracker
+            <DuelTracker.Components.HeaderToolbar />
+        </FluentHeader>
+
+
+        <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
+            @*        <NavMenu /> *@
+            <FluentBodyContent Class="body-content">
+                <ErrorBoundary>
+                    <ChildContent>
+                        <div class="content">
+                            @Body
+                        </div>
+                    </ChildContent>
+                    <ErrorContent Context="ex">
+                        <div class="blazor-error-boundary">@ex.Message</div>
+                    </ErrorContent>
+                </ErrorBoundary>
+            </FluentBodyContent>
+        </FluentStack>
+        <FluentDialogProvider />
+        @*     <FluentFooter>
         <a href="https://www.fluentui-blazor.net" target="_blank">Documentation and demos</a>
         <FluentSpacer />
         <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor" target="_blank">About Blazor</a>
     </FluentFooter> *@
-</FluentLayout>
+    </FluentLayout>
+
+</CascadingValue>
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await AppState.InitializeAsync();
+    }
+}
 
