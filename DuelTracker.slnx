@@ -1,5 +1,5 @@
 <Solution>
   <Folder Name="/Source/">
-    <Project Path="DuelTracker.csproj" />
+    <Project Path="Source/DuelTracker/DuelTracker.csproj" />
   </Folder>
 </Solution>
