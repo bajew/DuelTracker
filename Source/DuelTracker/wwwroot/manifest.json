@@ -1,7 +1,7 @@
 {
   "name": "DuelTracker",
-  "short_name": "DuelTracker",
-  "start_url": "/",
+  "short_name": "Duel Tracker",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
@@ -9,12 +9,12 @@
   "icons": [
     {
       "src": "icons/icon-192.svg",
-      "sizes": "any",
+      "sizes": "192x192",
       "type": "image/svg+xml"
     },
     {
       "src": "icons/icon-512.svg",
-      "sizes": "any",
+      "sizes": "512x512",
       "type": "image/svg+xml"
     }
   ]
